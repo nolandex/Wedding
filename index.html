@@ -14,7 +14,7 @@
             font-family: 'Playfair Display', serif;
             scroll-behavior: smooth;
             overflow-x: hidden;
-            background-color: #fdf2f8; /* Softer background */
+            background-color: #fdf2f8;
         }
         
         .great-vibes {
@@ -34,18 +34,6 @@
             overflow: hidden;
         }
         
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce');
-            background-size: cover;
-            background-position: center;
-            z-index: -2;
-        }
-        
         .hero-overlay {
             position: absolute;
             top: 0;
@@ -53,7 +41,7 @@
             width: 100%;
             height: 100%;
             background: rgba(0,0,0,0.3);
-            z-index: -1;
+            z-index: 1; /* Di atas background parallax */
         }
         
         .lightbox {
@@ -128,39 +116,38 @@
             25%, 75% { transform: rotate(45deg) scale(1.1); }
         }
         
-        /* 2D Flower animations (Lightweight & Efficient) */
-        .flower {
-            position: absolute;
-            z-index: 1;
-            pointer-events: none;
-            width: 60px;
-            height: 60px;
-            background-size: contain;
-            background-repeat: no-repeat;
-            background-position: center;
-            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
-            opacity: 0.7;
-        }
-        
-        .flower-1 { top: 10%; left: 5%; animation: float 8s ease-in-out infinite; }
-        .flower-2 { top: 20%; right: 10%; animation: float 10s ease-in-out infinite reverse; }
-        .flower-3 { bottom: 15%; left: 15%; animation: float 12s ease-in-out infinite; }
-        .flower-4 { bottom: 25%; right: 5%; animation: float 9s ease-in-out infinite reverse; }
-        
-        @keyframes float {
-            0% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-25px) rotate(15deg); }
-            100% { transform: translateY(0px) rotate(0deg); }
-        }
-        
         /* Parallax sections */
         .parallax-section {
             position: relative;
-            overflow: hidden;
-            background-attachment: fixed; /* Simpler, more performant parallax */
+            background-attachment: fixed;
             background-position: center;
             background-repeat: no-repeat;
             background-size: cover;
+        }
+
+        /* --- STYLING BARU UNTUK BUNGA SCROLL --- */
+        .scroll-flower {
+            position: fixed;
+            width: 200px;
+            height: 200px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            z-index: 2; /* Di atas overlay, di bawah konten */
+            transition: transform 0.2s ease-out; /* Transisi halus */
+            pointer-events: none; /* Agar tidak bisa diklik */
+        }
+        
+        #flower-left {
+            top: 20vh;
+            left: -50px; /* Sedikit di luar layar */
+            background-image: url('https://png.pngtree.com/png-vector/20220607/ourmid/pngtree-pink-rose-flower-with-green-leaf-png-image_4842188.png');
+        }
+
+        #flower-right {
+            top: 10vh;
+            right: -60px; /* Sedikit di luar layar */
+            background-image: url('https://png.pngtree.com/png-clipart/20230419/original/pngtree-beautiful-pink-rose-flower-png-image_9066057.png');
+            transform: scaleX(-1); /* Balikkan gambar agar menghadap ke dalam */
         }
     </style>
 </head>
@@ -168,11 +155,9 @@
     <div class="preloader">
         <div class="heart"></div>
     </div>
-
-    <div class="flower flower-1"></div>
-    <div class="flower flower-2"></div>
-    <div class="flower flower-3"></div>
-    <div class="flower flower-4"></div>
+    
+    <div id="flower-left" class="scroll-flower"></div>
+    <div id="flower-right" class="scroll-flower"></div>
 
     <audio id="wedding-music" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
@@ -191,7 +176,7 @@
     </div>
 
     <div id="lightbox" class="lightbox">
-        <span class="close-lightbox">&times;</span>
+        <span class="close-lightbox">×</span>
         <div class="lightbox-content">
             <img id="lightbox-img" class="lightbox-img" src="">
         </div>
@@ -213,7 +198,7 @@
         </a>
     </section>
 
-    <section id="bride-groom" class="py-20 bg-rose-50">
+    <section id="bride-groom" class="py-20 bg-rose-50 relative z-10">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
                 <h3 class="great-vibes text-4xl text-pink-600 mb-4">Our Story</h3>
@@ -248,8 +233,7 @@
         <div class="absolute inset-0 bg-pink-800 opacity-50"></div>
         <div class="container mx-auto px-4 text-center relative z-10">
             <h3 class="great-vibes text-4xl mb-4" data-aos="fade-up">Counting the Days</h3>
-            <h2 class="text-3xl font-bold mb-12" data-aos="fade-up">Until We Say "I Do"</h2>
-            <div class="flex justify-center gap-4 md:gap-8" data-aos="zoom-in">
+            <div id="countdown-timer" class="flex justify-center gap-4 md:gap-8" data-aos="zoom-in">
                 <div class="bg-white bg-opacity-20 rounded-lg p-6 w-24 md:w-32">
                     <div id="days" class="text-3xl md:text-5xl font-bold mb-2">00</div>
                     <div class="text-sm md:text-base">Days</div>
@@ -266,6 +250,9 @@
                     <div id="seconds" class="text-3xl md:text-5xl font-bold mb-2">00</div>
                     <div class="text-sm md:text-base">Seconds</div>
                 </div>
+            </div>
+             <div id="countdown-ended" class="hidden">
+                 <h2 class="text-3xl font-bold">The Wedding Has Passed! Thank You for Celebrating With Us!</h2>
             </div>
         </div>
     </section>
@@ -420,7 +407,7 @@
         document.body.addEventListener('click', playMusic, { once: true });
 
         musicToggle.addEventListener('click', (e) => {
-            e.stopPropagation(); // Prevent body click event
+            e.stopPropagation();
             if (isMusicPlaying) {
                 weddingMusic.pause();
                 musicToggle.innerHTML = '<i class="fas fa-volume-mute text-xl"></i>';
@@ -433,7 +420,7 @@
         
         // Scroll to Top Button
         const scrollTopBtn = document.getElementById('scroll-top');
-        window.addEventListener('scroll', function() {
+        window.addEventListener('scroll', () => {
             scrollTopBtn.classList.toggle('hidden', window.pageYOffset <= 300);
         });
         scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
@@ -445,7 +432,9 @@
             const distance = weddingDate - now;
             
             if (distance < 0) {
-                 document.getElementById('countdown').innerHTML = `<h2 class="text-3xl font-bold">The Wedding Has Passed! Thank You for Celebrating With Us!</h2>`;
+                 document.getElementById('countdown-timer').classList.add('hidden');
+                 document.getElementById('countdown-ended').classList.remove('hidden');
+                 clearInterval(countdownInterval); // Stop the timer
                  return;
             }
 
@@ -454,8 +443,8 @@
             document.getElementById('minutes').textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
             document.getElementById('seconds').textContent = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
+        const countdownInterval = setInterval(updateCountdown, 1000);
         updateCountdown();
-        setInterval(updateCountdown, 1000);
         
         // Gallery Lightbox
         const lightbox = document.getElementById('lightbox');
@@ -473,24 +462,44 @@
             if (e.target === lightbox) lightbox.style.display = 'none';
         });
         
-        // RSVP Form with improved confirmation
+        // RSVP Form
         const rsvpForm = document.getElementById('rsvp-form');
         const rsvpConfirmation = document.getElementById('rsvp-confirmation');
         
         rsvpForm.addEventListener('submit', function(e) {
             e.preventDefault();
             const name = document.getElementById('rsvp-name').value;
-            const attending = document.querySelector('input[name="attendance"]:checked').value;
-            
-            const message = `Thank you, ${name}! Your RSVP has been recorded.`;
-            rsvpConfirmation.textContent = message;
+            rsvpConfirmation.textContent = `Thank you, ${name}! Your RSVP has been recorded.`;
             rsvpConfirmation.style.display = 'block';
-            
             rsvpForm.reset();
+            setTimeout(() => { rsvpConfirmation.style.display = 'none'; }, 5000);
+        });
+
+        // --- LOGIKA BARU UNTUK EFEK BUNGA SAAT SCROLL ---
+        const flowerLeft = document.getElementById('flower-left');
+        const flowerRight = document.getElementById('flower-right');
+        let ticking = false;
+
+        function handleScrollEffects() {
+            const scrollY = window.pageYOffset;
             
-            setTimeout(() => {
-                rsvpConfirmation.style.display = 'none';
-            }, 5000); // Hide message after 5 seconds
+            // Atur batas atas efek (misal: 1200px dari atas)
+            if (scrollY < 1200) {
+                // Bunga kiri bergerak ke bawah (kecepatan 0.4x dari scroll)
+                // Bunga kanan bergerak ke bawah lebih lambat (kecepatan 0.2x dari scroll)
+                flowerLeft.style.transform = `translateY(${scrollY * 0.4}px)`;
+                flowerRight.style.transform = `scaleX(-1) translateY(${scrollY * 0.2}px)`;
+            }
+        }
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    handleScrollEffects();
+                    ticking = false;
+                });
+                ticking = true;
+            }
         });
 
     </script>
