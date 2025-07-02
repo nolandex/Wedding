@@ -4,22 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sarah & Michael's Wedding</title>
-    <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
-    <!-- AOS Animation Library -->
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Three.js for 3D flowers -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <style>
         /* Custom Styles */
         body {
             font-family: 'Playfair Display', serif;
             scroll-behavior: smooth;
             overflow-x: hidden;
+            background-color: #fdf2f8; /* Softer background */
         }
         
         .great-vibes {
@@ -27,10 +22,10 @@
         }
         
         .glass-card {
-            background: rgba(255, 255, 255, 0.15);
+            background: rgba(255, 255, 255, 0.4);
             backdrop-filter: blur(10px);
             -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
         .hero-section {
@@ -49,7 +44,6 @@
             background-size: cover;
             background-position: center;
             z-index: -2;
-            transform: translateZ(-1px) scale(1.5);
         }
         
         .hero-overlay {
@@ -100,17 +94,18 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: #f8f3ee;
+            background: #fdf2f8;
             display: flex;
             justify-content: center;
             align-items: center;
             z-index: 9999;
+            transition: opacity 0.5s ease;
         }
         
         .heart {
             width: 50px;
             height: 50px;
-            background-color: #e75480;
+            background-color: #e11d48;
             transform: rotate(45deg);
             animation: heartbeat 1.5s infinite;
         }
@@ -120,30 +115,20 @@
             content: "";
             width: 50px;
             height: 50px;
-            background-color: #e75480;
+            background-color: #e11d48;
             border-radius: 50%;
             position: absolute;
         }
         
-        .heart:before {
-            top: -25px;
-            left: 0;
-        }
-        
-        .heart:after {
-            top: 0;
-            left: -25px;
-        }
+        .heart:before { top: -25px; left: 0; }
+        .heart:after { top: 0; left: -25px; }
         
         @keyframes heartbeat {
-            0% { transform: rotate(45deg) scale(1); }
-            25% { transform: rotate(45deg) scale(1.1); }
-            50% { transform: rotate(45deg) scale(1); }
-            75% { transform: rotate(45deg) scale(1.1); }
-            100% { transform: rotate(45deg) scale(1); }
+            0%, 50%, 100% { transform: rotate(45deg) scale(1); }
+            25%, 75% { transform: rotate(45deg) scale(1.1); }
         }
         
-        /* Flower animations */
+        /* 2D Flower animations (Lightweight & Efficient) */
         .flower {
             position: absolute;
             z-index: 1;
@@ -153,106 +138,58 @@
             background-size: contain;
             background-repeat: no-repeat;
             background-position: center;
+            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
+            opacity: 0.7;
         }
         
-        .flower-1 {
-            top: 10%;
-            left: 5%;
-            animation: float 8s ease-in-out infinite;
-            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
-        }
-        
-        .flower-2 {
-            top: 20%;
-            right: 10%;
-            animation: float 10s ease-in-out infinite;
-            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
-        }
-        
-        .flower-3 {
-            bottom: 15%;
-            left: 15%;
-            animation: float 12s ease-in-out infinite;
-            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
-        }
-        
-        .flower-4 {
-            bottom: 25%;
-            right: 5%;
-            animation: float 9s ease-in-out infinite;
-            background-image: url('https://www.freepnglogos.com/uploads/rose-png/rose-png-rose-png-photos-2.png');
-        }
+        .flower-1 { top: 10%; left: 5%; animation: float 8s ease-in-out infinite; }
+        .flower-2 { top: 20%; right: 10%; animation: float 10s ease-in-out infinite reverse; }
+        .flower-3 { bottom: 15%; left: 15%; animation: float 12s ease-in-out infinite; }
+        .flower-4 { bottom: 25%; right: 5%; animation: float 9s ease-in-out infinite reverse; }
         
         @keyframes float {
-            0% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-20px) rotate(5deg); }
-            100% { transform: translateY(0) rotate(0deg); }
+            0% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-25px) rotate(15deg); }
+            100% { transform: translateY(0px) rotate(0deg); }
         }
         
         /* Parallax sections */
         .parallax-section {
             position: relative;
             overflow: hidden;
-        }
-        
-        .parallax-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-size: cover;
+            background-attachment: fixed; /* Simpler, more performant parallax */
             background-position: center;
-            z-index: -1;
-            transform: translateZ(-1px) scale(1.5);
-        }
-        
-        /* 3D Flower Container */
-        #flower-3d-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: -1;
+            background-repeat: no-repeat;
+            background-size: cover;
         }
     </style>
 </head>
-<body class="bg-rose-50 text-gray-800">
-    <!-- Preloader -->
+<body class="text-gray-800">
     <div class="preloader">
         <div class="heart"></div>
     </div>
 
-    <!-- 3D Flower Container -->
-    <div id="flower-3d-container"></div>
-
-    <!-- 2D Flowers -->
     <div class="flower flower-1"></div>
     <div class="flower flower-2"></div>
     <div class="flower flower-3"></div>
     <div class="flower flower-4"></div>
 
-    <!-- Music Player (hidden by default) -->
     <audio id="wedding-music" loop>
         <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
     </audio>
 
-    <!-- Floating Action Buttons -->
     <div class="fixed right-6 bottom-6 z-50 flex flex-col space-y-4">
         <button id="music-toggle" class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-pink-600 hover:bg-pink-100 transition-all">
             <i class="fas fa-music text-xl"></i>
         </button>
-        <button id="rsvp-fab" class="w-12 h-12 rounded-full bg-pink-600 shadow-lg flex items-center justify-center text-white hover:bg-pink-700 transition-all">
+        <a href="#rsvp" class="w-12 h-12 rounded-full bg-pink-600 shadow-lg flex items-center justify-center text-white hover:bg-pink-700 transition-all">
             <i class="fas fa-envelope text-xl"></i>
-        </button>
+        </a>
         <button id="scroll-top" class="w-12 h-12 rounded-full bg-white shadow-lg flex items-center justify-center text-pink-600 hover:bg-pink-100 transition-all hidden">
             <i class="fas fa-arrow-up text-xl"></i>
         </button>
     </div>
 
-    <!-- Lightbox for Gallery -->
     <div id="lightbox" class="lightbox">
         <span class="close-lightbox">&times;</span>
         <div class="lightbox-content">
@@ -260,11 +197,8 @@
         </div>
     </div>
 
-    <!-- Hero Section with Parallax -->
-    <section id="hero" class="hero-section flex items-center justify-center">
-        <div class="hero-bg parallax-bg"></div>
+    <section id="hero" class="hero-section flex items-center justify-center parallax-section" style="background-image: url('https://images.unsplash.com/photo-1531123897727-8f129e1688ce');">
         <div class="hero-overlay"></div>
-        
         <div class="container mx-auto px-4 z-10 text-center text-white" data-aos="fade-up">
             <h3 class="great-vibes text-4xl md:text-5xl mb-4">We're Getting Married</h3>
             <h1 class="text-5xl md:text-8xl font-bold mb-6">Sarah & Michael</h1>
@@ -279,7 +213,6 @@
         </a>
     </section>
 
-    <!-- Bride & Groom Section -->
     <section id="bride-groom" class="py-20 bg-rose-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -287,49 +220,35 @@
                 <h2 class="text-3xl font-bold mb-4">Bride & Groom</h2>
                 <div class="border-t border-pink-200 w-24 mx-auto"></div>
             </div>
-            
             <div class="flex flex-col md:flex-row items-center justify-center gap-12">
                 <div class="glass-card rounded-lg p-8 max-w-md" data-aos="fade-right">
                     <div class="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce" alt="Bride" class="w-full h-full object-cover">
                     </div>
                     <h3 class="great-vibes text-3xl text-center mb-4">Sarah Johnson</h3>
-                    <p class="text-center mb-4">Daughter of Mr. & Mrs. Johnson</p>
-                    <p class="text-center">"I knew Michael was the one when he made me laugh until I cried on our first date. His kindness and patience make every day brighter."</p>
+                    <p class="text-center">"I knew Michael was the one when he made me laugh until I cried on our first date."</p>
                 </div>
-                
                 <div class="hidden md:block" data-aos="zoom-in">
                     <div class="w-24 h-24 rounded-full bg-pink-600 flex items-center justify-center text-white text-4xl">
                         <i class="fas fa-heart"></i>
                     </div>
                 </div>
-                
                 <div class="glass-card rounded-lg p-8 max-w-md" data-aos="fade-left">
                     <div class="w-48 h-48 mx-auto mb-6 rounded-full overflow-hidden border-4 border-white shadow-lg">
                         <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Groom" class="w-full h-full object-cover">
                     </div>
                     <h3 class="great-vibes text-3xl text-center mb-4">Michael Smith</h3>
-                    <p class="text-center mb-4">Son of Mr. & Mrs. Smith</p>
-                    <p class="text-center">"Sarah's smile lights up my world. Her intelligence and compassion inspire me to be a better man every day."</p>
+                    <p class="text-center">"Sarah's smile lights up my world. Her intelligence and compassion inspire me every day."</p>
                 </div>
-            </div>
-            
-            <div class="mt-16 max-w-3xl mx-auto glass-card rounded-lg p-8" data-aos="fade-up">
-                <h3 class="great-vibes text-3xl text-center mb-6">Our Love Story</h3>
-                <p class="mb-4">We met in college during a mutual friend's birthday party. Michael spilled his drink on Sarah's dress, and instead of getting angry, she laughed it off. That moment sparked a friendship that grew into love.</p>
-                <p class="mb-4">After graduating, we moved to the same city and built our careers while supporting each other through every challenge. On a trip to Paris, Michael proposed at the Eiffel Tower at sunset.</p>
-                <p>Now, we're excited to begin our forever together, surrounded by the love and support of our family and friends.</p>
             </div>
         </div>
     </section>
 
-    <!-- Countdown Section with Parallax -->
-    <section id="countdown" class="py-20 bg-pink-600 text-white parallax-section">
-        <div class="parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed');"></div>
+    <section id="countdown" class="py-20 text-white parallax-section" style="background-image: url('https://images.unsplash.com/photo-1519225421980-715cb0215aed');">
+        <div class="absolute inset-0 bg-pink-800 opacity-50"></div>
         <div class="container mx-auto px-4 text-center relative z-10">
             <h3 class="great-vibes text-4xl mb-4" data-aos="fade-up">Counting the Days</h3>
             <h2 class="text-3xl font-bold mb-12" data-aos="fade-up">Until We Say "I Do"</h2>
-            
             <div class="flex justify-center gap-4 md:gap-8" data-aos="zoom-in">
                 <div class="bg-white bg-opacity-20 rounded-lg p-6 w-24 md:w-32">
                     <div id="days" class="text-3xl md:text-5xl font-bold mb-2">00</div>
@@ -351,7 +270,6 @@
         </div>
     </section>
 
-    <!-- Event Schedule Section -->
     <section id="schedule" class="py-20 bg-rose-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -359,78 +277,46 @@
                 <h2 class="text-3xl font-bold mb-4">Wedding Events</h2>
                 <div class="border-t border-pink-200 w-24 mx-auto"></div>
             </div>
-            
-            <div class="max-w-4xl mx-auto">
-                <div class="glass-card rounded-lg p-8 mb-8" data-aos="fade-right">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/3 text-center md:text-right mb-6 md:mb-0 md:pr-8">
-                            <h3 class="great-vibes text-3xl text-pink-600 mb-2">Akad Nikah</h3>
-                            <p class="text-lg font-semibold">June 15, 2024</p>
-                            <p>10:00 AM - 12:00 PM</p>
-                        </div>
-                        <div class="md:w-2/3">
-                            <h4 class="text-xl font-bold mb-2">Grand Mosque</h4>
-                            <p class="mb-4">123 Islamic Center Street, Jakarta</p>
-                            <p>The sacred ceremony where we officially become husband and wife according to Islamic tradition. Please arrive 30 minutes early for seating.</p>
-                        </div>
+            <div class="max-w-4xl mx-auto space-y-8">
+                <div class="glass-card rounded-lg p-8 flex flex-col md:flex-row items-center" data-aos="fade-right">
+                    <div class="md:w-1/3 text-center md:text-right mb-6 md:mb-0 md:pr-8">
+                        <h3 class="great-vibes text-3xl text-pink-600 mb-2">Akad Nikah</h3>
+                        <p class="text-lg font-semibold">June 15, 2024</p>
+                        <p>10:00 AM - 12:00 PM</p>
+                    </div>
+                    <div class="md:w-2/3 md:pl-8 md:border-l border-pink-200">
+                        <h4 class="text-xl font-bold mb-2">Grand Mosque, Jakarta</h4>
+                        <p>The sacred ceremony where we officially become husband and wife. Please arrive 30 minutes early.</p>
                     </div>
                 </div>
-                
-                <div class="glass-card rounded-lg p-8" data-aos="fade-left">
-                    <div class="flex flex-col md:flex-row items-center">
-                        <div class="md:w-1/3 text-center md:text-right mb-6 md:mb-0 md:pr-8">
-                            <h3 class="great-vibes text-3xl text-pink-600 mb-2">Reception</h3>
-                            <p class="text-lg font-semibold">June 15, 2024</p>
-                            <p>6:00 PM - 10:00 PM</p>
-                        </div>
-                        <div class="md:w-2/3">
-                            <h4 class="text-xl font-bold mb-2">Grand Ballroom</h4>
-                            <p class="mb-4">456 Luxury Hotel Avenue, Jakarta</p>
-                            <p>Join us for an evening of celebration, delicious food, and dancing. Cocktail attire recommended. There will be a photobooth and live entertainment.</p>
-                        </div>
+                <div class="glass-card rounded-lg p-8 flex flex-col md:flex-row items-center" data-aos="fade-left">
+                    <div class="md:w-1/3 text-center md:text-right mb-6 md:mb-0 md:pr-8">
+                        <h3 class="great-vibes text-3xl text-pink-600 mb-2">Reception</h3>
+                        <p class="text-lg font-semibold">June 15, 2024</p>
+                        <p>6:00 PM - 10:00 PM</p>
+                    </div>
+                    <div class="md:w-2/3 md:pl-8 md:border-l border-pink-200">
+                        <h4 class="text-xl font-bold mb-2">Grand Ballroom, Jakarta</h4>
+                        <p>Join us for an evening of celebration, delicious food, and dancing. Cocktail attire recommended.</p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Location Section with Parallax -->
-    <section id="location" class="py-20 bg-white parallax-section">
-        <div class="parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1523438885200-e635ba2c371e'); opacity: 0.2;"></div>
-        <div class="container mx-auto px-4 relative z-10">
+    <section id="location" class="py-20 bg-white">
+        <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
                 <h3 class="great-vibes text-4xl text-pink-600 mb-4">Wedding Venue</h3>
                 <h2 class="text-3xl font-bold mb-4">Location</h2>
                 <div class="border-t border-pink-200 w-24 mx-auto"></div>
             </div>
-            
-            <div class="flex flex-col md:flex-row gap-8 max-w-6xl mx-auto">
-                <div class="md:w-1/2" data-aos="fade-right">
-                    <div class="glass-card rounded-lg p-6 h-full">
-                        <h3 class="text-xl font-bold mb-4">Grand Mosque (Akad Nikah)</h3>
-                        <p class="mb-4"><i class="fas fa-map-marker-alt text-pink-600 mr-2"></i> 123 Islamic Center Street, Jakarta</p>
-                        <p class="mb-4"><i class="fas fa-clock text-pink-600 mr-2"></i> June 15, 2024 at 10:00 AM</p>
-                        <p>Parking available at the mosque parking lot. Please follow the signs to the ceremony hall.</p>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2" data-aos="fade-left">
-                    <div class="glass-card rounded-lg p-6 h-full">
-                        <h3 class="text-xl font-bold mb-4">Grand Ballroom (Reception)</h3>
-                        <p class="mb-4"><i class="fas fa-map-marker-alt text-pink-600 mr-2"></i> 456 Luxury Hotel Avenue, Jakarta</p>
-                        <p class="mb-4"><i class="fas fa-clock text-pink-600 mr-2"></i> June 15, 2024 at 6:00 PM</p>
-                        <p>Valet parking available. The ballroom is on the 3rd floor - elevators are located in the hotel lobby.</p>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="mt-12 rounded-xl overflow-hidden shadow-lg" data-aos="zoom-in">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.521260322283!2d106.8195613507824!3d-6.194741395493371!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f5390917b759%3A0x6b462cb0e2c7bc8a!2sMonumen%20Nasional!5e0!3m2!1sen!2sid!4v1629297217973!5m2!1sen!2sid" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+            <div class="mt-8 rounded-xl overflow-hidden shadow-lg" data-aos="zoom-in">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3966.495079136959!2d106.82434931476902!3d-6.19832599551372!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x2e69f42369415c1d%3A0x23a414b2d39f7e2a!2sGrand%20Ballroom%20of%20Grand%20Hyatt%20Jakarta!5e0!3m2!1sen!2sid!4v1672583800000" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
             </div>
         </div>
     </section>
 
-    <!-- Gallery Section -->
     <section id="gallery" class="py-20 bg-rose-50">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -438,70 +324,19 @@
                 <h2 class="text-3xl font-bold mb-4">Photo Gallery</h2>
                 <div class="border-t border-pink-200 w-24 mx-auto"></div>
             </div>
-            
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in">
-                    <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed" alt="Couple at beach" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e" alt="Engagement ring" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70" alt="Proposal moment" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47" alt="Couple laughing" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in">
-                    <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt="Bride portrait" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="100">
-                    <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Groom portrait" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="200">
-                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Couple hiking" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
-                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="300">
-                    <img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2" alt="Romantic dinner" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110">
-                </div>
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in"><img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed" alt="Couple photo 1" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="100"><img src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e" alt="Couple photo 2" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="200"><img src="https://images.unsplash.com/photo-1529333166437-7750a6dd5a70" alt="Couple photo 3" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="300"><img src="https://images.unsplash.com/photo-1494774157365-9e04c6720e47" alt="Couple photo 4" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in"><img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e" alt="Couple photo 5" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="100"><img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d" alt="Couple photo 6" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="200"><img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330" alt="Couple photo 7" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
+                <div class="gallery-item overflow-hidden rounded-lg cursor-pointer" data-aos="zoom-in" data-aos-delay="300"><img src="https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2" alt="Couple photo 8" class="w-full h-64 object-cover transition-transform duration-300 hover:scale-110"></div>
             </div>
         </div>
     </section>
 
-    <!-- Guestbook Section with Parallax -->
-    <section id="guestbook" class="py-20 bg-white parallax-section">
-        <div class="parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1529333166437-7750a6dd5a70'); opacity: 0.1;"></div>
-        <div class="container mx-auto px-4 relative z-10">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <h3 class="great-vibes text-4xl text-pink-600 mb-4">Leave Us</h3>
-                <h2 class="text-3xl font-bold mb-4">A Message</h2>
-                <div class="border-t border-pink-200 w-24 mx-auto"></div>
-            </div>
-            
-            <div class="max-w-2xl mx-auto glass-card rounded-lg p-8" data-aos="zoom-in">
-                <form id="guestbook-form" class="space-y-6">
-                    <div>
-                        <label for="guest-name" class="block text-sm font-medium text-gray-700 mb-1">Your Name</label>
-                        <input type="text" id="guest-name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required>
-                    </div>
-                    <div>
-                        <label for="guest-message" class="block text-sm font-medium text-gray-700 mb-1">Your Message</label>
-                        <textarea id="guest-message" rows="4" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-pink-600 text-white py-3 rounded-md hover:bg-pink-700 transition-colors">
-                        Submit Message
-                    </button>
-                </form>
-                
-                <div id="guestbook-entries" class="mt-12 space-y-6">
-                    <h3 class="text-xl font-bold mb-6">Messages from Our Guests</h3>
-                    <!-- Messages will be added here dynamically -->
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- RSVP Section -->
     <section id="rsvp" class="py-20 bg-pink-600 text-white">
         <div class="container mx-auto px-4">
             <div class="text-center mb-16" data-aos="fade-up">
@@ -509,128 +344,46 @@
                 <h2 class="text-3xl font-bold mb-4">RSVP</h2>
                 <div class="border-t border-pink-300 w-24 mx-auto"></div>
             </div>
-            
             <div class="max-w-2xl mx-auto glass-card rounded-lg p-8" data-aos="zoom-in">
                 <form id="rsvp-form" class="space-y-6">
                     <div>
                         <label for="rsvp-name" class="block text-sm font-medium mb-1">Your Name</label>
-                        <input type="text" id="rsvp-name" class="w-full px-4 py-2 bg-white bg-opacity-20 border border-pink-300 rounded-md focus:ring-2 focus:ring-white focus:border-white" required>
+                        <input type="text" id="rsvp-name" class="w-full px-4 py-2 text-gray-800 border-gray-300 rounded-md focus:ring-pink-500 focus:border-pink-500" required>
                     </div>
-                    <div>
-                        <label for="rsvp-email" class="block text-sm font-medium mb-1">Email Address</label>
-                        <input type="email" id="rsvp-email" class="w-full px-4 py-2 bg-white bg-opacity-20 border border-pink-300 rounded-md focus:ring-2 focus:ring-white focus:border-white" required>
-                    </div>
-                    <div>
-                        <label for="rsvp-guests" class="block text-sm font-medium mb-1">Number of Guests</label>
-                        <select id="rsvp-guests" class="w-full px-4 py-2 bg-white bg-opacity-20 border border-pink-300 rounded-md focus:ring-2 focus:ring-white focus:border-white" required>
-                            <option value="1">1 (Just Me)</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                            <option value="5">5+</option>
-                        </select>
-                    </div>
-                    <div>
+                     <div>
                         <p class="block text-sm font-medium mb-3">Will You Attend?</p>
                         <div class="flex items-center space-x-6">
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="attendance" value="yes" class="h-5 w-5 text-pink-600 focus:ring-white" checked>
-                                <span class="ml-2">Yes, I'll be there!</span>
-                            </label>
-                            <label class="inline-flex items-center">
-                                <input type="radio" name="attendance" value="no" class="h-5 w-5 text-pink-600 focus:ring-white">
-                                <span class="ml-2">Regretfully decline</span>
-                            </label>
+                            <label class="inline-flex items-center"><input type="radio" name="attendance" value="yes" class="h-5 w-5 text-pink-500 focus:ring-white" checked><span class="ml-2">Yes, I'll be there!</span></label>
+                            <label class="inline-flex items-center"><input type="radio" name="attendance" value="no" class="h-5 w-5 text-pink-500 focus:ring-white"><span class="ml-2">Regretfully decline</span></label>
                         </div>
-                    </div>
-                    <div>
-                        <label for="rsvp-message" class="block text-sm font-medium mb-1">Special Requests/Dietary Restrictions</label>
-                        <textarea id="rsvp-message" rows="3" class="w-full px-4 py-2 bg-white bg-opacity-20 border border-pink-300 rounded-md focus:ring-2 focus:ring-white focus:border-white"></textarea>
                     </div>
                     <button type="submit" class="w-full bg-white text-pink-600 py-3 rounded-md hover:bg-pink-100 transition-colors font-semibold">
                         Submit RSVP
                     </button>
                 </form>
+                <div id="rsvp-confirmation" class="mt-4 text-center font-semibold" style="display: none;"></div>
             </div>
         </div>
     </section>
-
-    <!-- Gift Section -->
-    <section id="gifts" class="py-20 bg-rose-50">
-        <div class="container mx-auto px-4">
-            <div class="text-center mb-16" data-aos="fade-up">
-                <h3 class="great-vibes text-4xl text-pink-600 mb-4">Gifts & Blessings</h3>
-                <h2 class="text-3xl font-bold mb-4">Wedding Gifts</h2>
-                <div class="border-t border-pink-200 w-24 mx-auto"></div>
-            </div>
-            
-            <div class="max-w-4xl mx-auto flex flex-col md:flex-row gap-8">
-                <div class="md:w-1/2 glass-card rounded-lg p-8" data-aos="fade-right">
-                    <h3 class="text-xl font-bold mb-4">Bank Transfer</h3>
-                    <p class="mb-6">Your presence at our wedding is the greatest gift of all. However, if you wish to give a monetary gift, we would be deeply grateful.</p>
-                    
-                    <div class="space-y-4">
-                        <div>
-                            <p class="font-semibold">Bank Name:</p>
-                            <p>National Bank</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Account Name:</p>
-                            <p>Sarah Johnson & Michael Smith</p>
-                        </div>
-                        <div>
-                            <p class="font-semibold">Account Number:</p>
-                            <p>1234 5678 9012 3456</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="md:w-1/2 glass-card rounded-lg p-8 flex flex-col items-center justify-center" data-aos="fade-left">
-                    <h3 class="text-xl font-bold mb-4 text-center">Scan QR Code</h3>
-                    <div class="w-48 h-48 bg-white p-4 rounded-lg mb-4">
-                        <img src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://example.com/wedding-gift" alt="QR Code" class="w-full h-full">
-                    </div>
-                    <p class="text-center">Scan this QR code with your mobile banking app to make a direct transfer.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Thank You Section with Parallax -->
-    <section id="thank-you" class="py-20 bg-white parallax-section">
-        <div class="parallax-bg" style="background-image: url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2'); opacity: 0.1;"></div>
-        <div class="container mx-auto px-4 text-center relative z-10">
+    
+    <section id="thank-you" class="py-20 bg-rose-50">
+        <div class="container mx-auto px-4 text-center">
             <div class="max-w-3xl mx-auto" data-aos="zoom-in">
                 <h3 class="great-vibes text-4xl text-pink-600 mb-6">Thank You</h3>
-                <h2 class="text-3xl font-bold mb-8">For Being Part of Our Journey</h2>
-                <p class="text-lg mb-8">We are incredibly grateful for the love and support of our family and friends as we embark on this new chapter of our lives together. Your presence at our wedding means the world to us, and we can't wait to celebrate this special day with you.</p>
+                <p class="text-lg mb-8">We are incredibly grateful for your love and support. Your presence means the world to us, and we can't wait to celebrate with you.</p>
                 <p class="great-vibes text-3xl text-pink-600">With Love,</p>
                 <p class="great-vibes text-4xl mt-4">Sarah & Michael</p>
             </div>
         </div>
     </section>
 
-    <!-- Footer -->
-    <footer class="py-12 bg-gray-900 text-white">
+    <footer class="py-8 bg-gray-900 text-white">
         <div class="container mx-auto px-4 text-center">
-            <div class="flex justify-center space-x-6 mb-8">
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-facebook-f text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-instagram text-xl"></i>
-                </a>
-                <a href="#" class="text-gray-400 hover:text-white transition-colors">
-                    <i class="fab fa-twitter text-xl"></i>
-                </a>
-            </div>
-            <p class="mb-4">#SarahAndMichael2024</p>
+            <p class="mb-2">#SarahAndMichael2024</p>
             <p class="text-gray-400 text-sm">© 2024 Sarah & Michael's Wedding. All rights reserved.</p>
         </div>
     </footer>
 
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
     <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
         // Initialize AOS animation
@@ -642,12 +395,11 @@
         
         // Preloader
         window.addEventListener('load', function() {
-            setTimeout(function() {
-                document.querySelector('.preloader').style.opacity = '0';
-                setTimeout(function() {
-                    document.querySelector('.preloader').style.display = 'none';
-                }, 500);
-            }, 1500);
+            const preloader = document.querySelector('.preloader');
+            setTimeout(() => {
+                preloader.style.opacity = '0';
+                setTimeout(() => { preloader.style.display = 'none'; }, 500);
+            }, 1000);
         });
         
         // Music Player
@@ -655,20 +407,20 @@
         const weddingMusic = document.getElementById('wedding-music');
         let isMusicPlaying = false;
         
-        // Try to autoplay music (will only work with user interaction due to browser policies)
-        document.addEventListener('click', function() {
+        const playMusic = () => {
             if (!isMusicPlaying) {
-                weddingMusic.volume = 0.5;
+                weddingMusic.volume = 0.3;
                 weddingMusic.play().then(() => {
                     isMusicPlaying = true;
                     musicToggle.innerHTML = '<i class="fas fa-volume-up text-xl"></i>';
-                }).catch(error => {
-                    console.log('Autoplay prevented:', error);
-                });
+                    document.body.removeEventListener('click', playMusic);
+                }).catch(error => console.log('Autoplay prevented.'));
             }
-        }, { once: true });
-        
-        musicToggle.addEventListener('click', function() {
+        };
+        document.body.addEventListener('click', playMusic, { once: true });
+
+        musicToggle.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent body click event
             if (isMusicPlaying) {
                 weddingMusic.pause();
                 musicToggle.innerHTML = '<i class="fas fa-volume-mute text-xl"></i>';
@@ -681,28 +433,10 @@
         
         // Scroll to Top Button
         const scrollTopBtn = document.getElementById('scroll-top');
-        
         window.addEventListener('scroll', function() {
-            if (window.pageYOffset > 300) {
-                scrollTopBtn.classList.remove('hidden');
-            } else {
-                scrollTopBtn.classList.add('hidden');
-            }
+            scrollTopBtn.classList.toggle('hidden', window.pageYOffset <= 300);
         });
-        
-        scrollTopBtn.addEventListener('click', function() {
-            window.scrollTo({
-                top: 0,
-                behavior: 'smooth'
-            });
-        });
-        
-        // RSVP FAB
-        document.getElementById('rsvp-fab').addEventListener('click', function() {
-            document.getElementById('rsvp').scrollIntoView({
-                behavior: 'smooth'
-            });
-        });
+        scrollTopBtn.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
         
         // Countdown Timer
         function updateCountdown() {
@@ -710,183 +444,55 @@
             const now = new Date().getTime();
             const distance = weddingDate - now;
             
-            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
-            
-            document.getElementById('days').textContent = days.toString().padStart(2, '0');
-            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
-            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
-            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            if (distance < 0) {
+                 document.getElementById('countdown').innerHTML = `<h2 class="text-3xl font-bold">The Wedding Has Passed! Thank You for Celebrating With Us!</h2>`;
+                 return;
+            }
+
+            document.getElementById('days').textContent = Math.floor(distance / (1000 * 60 * 60 * 24)).toString().padStart(2, '0');
+            document.getElementById('hours').textContent = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)).toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60)).toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = Math.floor((distance % (1000 * 60)) / 1000).toString().padStart(2, '0');
         }
-        
         updateCountdown();
         setInterval(updateCountdown, 1000);
         
         // Gallery Lightbox
         const lightbox = document.getElementById('lightbox');
         const lightboxImg = document.getElementById('lightbox-img');
-        const closeLightbox = document.querySelector('.close-lightbox');
-        const galleryItems = document.querySelectorAll('.gallery-item img');
         
-        galleryItems.forEach(item => {
+        document.querySelectorAll('.gallery-item img').forEach(item => {
             item.addEventListener('click', function() {
                 lightbox.style.display = 'block';
                 lightboxImg.src = this.src;
             });
         });
         
-        closeLightbox.addEventListener('click', function() {
-            lightbox.style.display = 'none';
+        document.querySelector('.close-lightbox').addEventListener('click', () => lightbox.style.display = 'none');
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) lightbox.style.display = 'none';
         });
         
-        lightbox.addEventListener('click', function(e) {
-            if (e.target === lightbox) {
-                lightbox.style.display = 'none';
-            }
-        });
-        
-        // Guestbook Form
-        const guestbookForm = document.getElementById('guestbook-form');
-        const guestbookEntries = document.getElementById('guestbook-entries');
-        
-        guestbookForm.addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const name = document.getElementById('guest-name').value;
-            const message = document.getElementById('guest-message').value;
-            
-            const entry = document.createElement('div');
-            entry.className = 'glass-card rounded-lg p-6';
-            entry.innerHTML = `
-                <h4 class="font-bold text-lg mb-2">${name}</h4>
-                <p class="text-gray-700">${message}</p>
-                <p class="text-sm text-gray-500 mt-2">${new Date().toLocaleDateString()}</p>
-            `;
-            
-            guestbookEntries.appendChild(entry);
-            guestbookForm.reset();
-            
-            // Scroll to the new entry
-            entry.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        });
-        
-        // RSVP Form
+        // RSVP Form with improved confirmation
         const rsvpForm = document.getElementById('rsvp-form');
+        const rsvpConfirmation = document.getElementById('rsvp-confirmation');
         
         rsvpForm.addEventListener('submit', function(e) {
             e.preventDefault();
-            
             const name = document.getElementById('rsvp-name').value;
             const attending = document.querySelector('input[name="attendance"]:checked').value;
             
-            alert(`Thank you, ${name}! We've recorded your RSVP as ${attending === 'yes' ? 'attending' : 'not attending'}.`);
+            const message = `Thank you, ${name}! Your RSVP has been recorded.`;
+            rsvpConfirmation.textContent = message;
+            rsvpConfirmation.style.display = 'block';
+            
             rsvpForm.reset();
+            
+            setTimeout(() => {
+                rsvpConfirmation.style.display = 'none';
+            }, 5000); // Hide message after 5 seconds
         });
-        
-        // Parallax Effect
-        document.addEventListener('scroll', function() {
-            const parallaxSections = document.querySelectorAll('.parallax-section');
-            const scrollPosition = window.pageYOffset;
-            
-            parallaxSections.forEach(section => {
-                const bg = section.querySelector('.parallax-bg');
-                if (bg) {
-                    const offset = section.offsetTop;
-                    const distance = scrollPosition - offset;
-                    bg.style.transform = `translateZ(-1px) scale(1.5) translateY(${distance * 0.3}px)`;
-                }
-            });
-            
-            // Hero section parallax
-            const heroBg = document.querySelector('.hero-bg');
-            if (heroBg) {
-                heroBg.style.transform = `translateZ(-1px) scale(1.5) translateY(${scrollPosition * 0.3}px)`;
-            }
-        });
-        
-        // 3D Flower Animation with Three.js
-        function init3DFlower() {
-            const container = document.getElementById('flower-3d-container');
-            if (!container) return;
-            
-            // Set up the scene
-            const scene = new THREE.Scene();
-            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(window.innerWidth, window.innerHeight);
-            container.appendChild(renderer.domElement);
-            
-            // Create flower geometry
-            const geometry = new THREE.SphereGeometry(1, 32, 32);
-            
-            // Create pink material
-            const material = new THREE.MeshBasicMaterial({ 
-                color: 0xff69b4,
-                transparent: true,
-                opacity: 0.6
-            });
-            
-            // Create flower petals
-            const flower = new THREE.Group();
-            
-            for (let i = 0; i < 8; i++) {
-                const petal = new THREE.Mesh(geometry, material);
-                petal.scale.set(0.5, 1, 0.2);
-                petal.position.x = Math.sin(i * Math.PI / 4) * 2;
-                petal.position.y = Math.cos(i * Math.PI / 4) * 2;
-                flower.add(petal);
-            }
-            
-            // Add center of flower
-            const center = new THREE.Mesh(
-                new THREE.SphereGeometry(0.5, 32, 32),
-                new THREE.MeshBasicMaterial({ color: 0xffff00 })
-            );
-            flower.add(center);
-            
-            scene.add(flower);
-            
-            // Position camera
-            camera.position.z = 5;
-            
-            // Make flower float around
-            let mouseX = 0;
-            let mouseY = 0;
-            
-            document.addEventListener('mousemove', (event) => {
-                mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-                mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
-            });
-            
-            // Animation loop
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Rotate flower
-                flower.rotation.x += 0.005;
-                flower.rotation.y += 0.01;
-                
-                // Move flower with mouse
-                flower.position.x = mouseX * 2;
-                flower.position.y = mouseY * 2;
-                
-                renderer.render(scene, camera);
-            }
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                camera.aspect = window.innerWidth / window.innerHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(window.innerWidth, window.innerHeight);
-            });
-            
-            animate();
-        }
-        
-        // Initialize 3D flower
-        init3DFlower();
+
     </script>
 </body>
-  </html>
+</html>
